@@ -1,48 +1,190 @@
-# Insurance Fraud Detection Using Machine Learning
+# 🛡️ Insurance Fraud Detection System
+### Machine Learning — College Mini-Project
 
-**Developed by:** Avya Nand  
-**Institution:** LNCT, Bhopal  
-**Program:** Smart Bridge Internship
+A complete fraud detection system for **Automobile**, **Health**, and **Property** insurance claims, powered by Logistic Regression, Decision Tree, and Random Forest classifiers.
 
-## 📌 Project Overview
-This project aims to detect fraudulent insurance claims using advanced Machine Learning algorithms. Insurance fraud is a significant challenge for the industry, leading to massive financial losses. By automating the detection process, we can identify suspicious patterns that might be missed by manual audits.
+---
 
-## 🛠️ Tech Stack
-* **Language:** Python
-* **Libraries:** Pandas, NumPy, Scikit-learn (Decision Tree, Random Forest, KNN), XGBoost, Matplotlib, Seaborn
-* **Web Framework:** Flask (for model deployment)
-* **IDE:** Jupyter Notebook / VS Code
+## 📁 Project Structure
 
-## 🏆 Certifications & Achievements
-* Received the **AI Sashakt** badge from IndiaAI Mission, MeitY, and Intel India for taking the AI Responsibility Pledge.
-* Participant in the **MY Bharat Budget Quest 2026**.
+```
+insurance_fraud_detection/
+│
+├── app.py                      # 🌐 Streamlit web interface (main UI)
+├── train.py                    # 🏋️  Train all models (run this first!)
+├── requirements.txt            # 📦 Python dependencies
+│
+├── data/
+│   ├── __init__.py
+│   └── generate_data.py        # 🔢 Synthetic dataset generator
+│
+├── models/
+│   ├── __init__.py
+│   └── train_models.py         # 🤖 Model training & evaluation logic
+│
+├── utils/
+│   ├── __init__.py
+│   └── preprocessing.py        # 🔧 Data preprocessing utilities
+│
+├── scenarios/
+│   ├── __init__.py
+│   ├── auto_fraud.py           # 🚗 Automobile insurance pipeline
+│   ├── health_fraud.py         # 🏥 Health insurance pipeline
+│   └── property_fraud.py       # 🏠 Property insurance pipeline
+│
+├── saved_models/               # 💾 Persisted models (auto-created)
+│   ├── auto_model.pkl
+│   ├── auto_scaler.pkl
+│   ├── health_model.pkl
+│   ├── health_scaler.pkl
+│   ├── property_model.pkl
+│   └── property_scaler.pkl
+│
+└── plots/                      # 🖼️ Evaluation charts (auto-created)
+    ├── auto_confusion.png
+    ├── auto_roc.png
+    ├── auto_model_comparison.png
+    ├── auto_feature_importance.png
+    ├── health_*.png
+    └── property_*.png
+```
 
-## 📖 Epic 1: Problem Understanding
+---
 
-### Activity 1.1: Specify the business problem
-The insurance industry faces a massive challenge with fraudulent claims, which cost billions of dollars annually. Manual investigation of every claim is time-consuming, expensive, and prone to human error. The business problem is to develop an automated system that can accurately and quickly identify potentially fraudulent claims from legitimate ones, allowing human investigators to focus only on high-risk cases.
+## 🚀 How to Run Locally
 
-### Activity 1.2: Business requirements
-To solve this problem effectively, the developed machine learning solution must meet the following requirements:
-* **High Precision & Recall:** The model must minimize False Positives (flagging genuine claims as fraud) to avoid customer dissatisfaction, while maintaining a high Recall to catch actual frauds.
-* **Automation:** The system should seamlessly integrate with existing claim processing workflows.
-* **Scalability:** It must handle a large volume of daily insurance claims efficiently.
-* **Interpretability:** The model should provide insights into why a claim was flagged as fraudulent.
+### 1. Clone / Download the Project
+```bash
+cd insurance_fraud_detection
+```
 
-### Activity 1.3: Literature Survey
-Traditionally, insurance fraud detection relied on rule-based systems and manual audits, which fraudsters quickly learned to bypass. Recent advancements in Machine Learning have shifted the focus toward predictive modeling. Studies show that supervised learning algorithms—such as Decision Trees, Random Forests, K-Nearest Neighbors (KNN), and XGBoost—are highly effective in recognizing complex, hidden patterns in historical claim data that indicate fraudulent behavior.
+### 2. Create a Virtual Environment (Recommended)
+```bash
+python -m venv venv
 
-### Activity 1.4: Social or Business Impact
-* **Business Impact:** Successfully deploying this model will drastically reduce financial losses for the insurance company and cut down the operational costs associated with manual investigations.
-* **Social Impact:** By saving money on fraudulent payouts, insurance companies can prevent premium hikes. This ensures that honest, everyday customers do not have to pay higher premiums to cover the costs of fraud, making insurance more affordable and fair for everyone.
+# Windows
+venv\Scripts\activate
 
-## 📂 Folder Structure
-```text
-├── data/               # Contains dataset (e.g., insurance_claims.csv)
-├── notebooks/          # Jupyter Notebooks for EDA & Model Training
-├── models/             # Saved trained model files (.pkl)
-├── static/             # CSS & Images for web UI
-├── templates/          # HTML files for Flask app
-├── app.py              # Main Flask application
-├── requirements.txt    # List of project dependencies
-└── README.md           # Project documentation
+# macOS / Linux
+source venv/bin/activate
+```
+
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Train All Models
+```bash
+python train.py
+```
+This will:
+- Generate synthetic datasets for all 3 scenarios
+- Train 3 ML models per scenario (9 models total)
+- Print accuracy, AUC-ROC, and classification reports
+- Save best models to `saved_models/`
+- Save evaluation plots to `plots/`
+
+### 5. Launch the Web Interface
+```bash
+streamlit run app.py
+```
+Visit `http://localhost:8501` in your browser.
+
+---
+
+## 🧠 Machine Learning Models
+
+| Model               | Type              | Key Hyperparameters              |
+|---------------------|-------------------|----------------------------------|
+| Logistic Regression | Linear Classifier | C=0.5, max_iter=1000             |
+| Decision Tree       | Tree-based        | max_depth=8                      |
+| Random Forest       | Ensemble          | n_estimators=150, max_depth=12   |
+
+The **best model** (by AUC-ROC) is automatically saved and used for predictions.
+
+---
+
+## 📊 Evaluation Metrics
+
+For each scenario, the system generates:
+- ✅ **Accuracy** — percentage of correct predictions
+- ✅ **AUC-ROC** — ability to distinguish fraud from legitimate
+- ✅ **Confusion Matrix** — visualised as a heatmap
+- ✅ **Classification Report** — precision, recall, F1-score per class
+- ✅ **Feature Importance** — top features driving fraud detection
+- ✅ **ROC Curves** — comparison across all models
+
+---
+
+## 🔍 Scenarios Explained
+
+### Scenario 1: 🚗 Automobile Insurance
+Detects fraud based on:
+- Inflated claim amounts vs. vehicle price
+- High-frequency past claimants
+- New policy + immediate claim
+- Odd-hour incidents, no witnesses/police report
+
+### Scenario 2: 🏥 Health Insurance
+Detects fraud based on:
+- Excessive diagnoses and procedures
+- Overbilling ratio > 1.5×
+- Duplicate claim flags
+- Very short interval between claims
+- Too many physicians for one patient
+
+### Scenario 3: 🏠 Property Insurance
+Detects fraud based on:
+- Claim amount ≈ total property value
+- New policy + immediate claim
+- Old property, maximum damage severity
+- No photos, no police/fire report
+- No third-party assessment
+
+---
+
+## 📦 Dataset
+
+All datasets are **synthetically generated** (no real personal data):
+- 2,000 records per scenario
+- 75% Legitimate, 25% Fraud (realistic class imbalance)
+- Features engineered to reflect real-world fraud patterns
+
+---
+
+## 🏆 Expected Results
+
+| Scenario   | Best Model    | Accuracy | AUC-ROC |
+|------------|---------------|----------|---------|
+| Auto       | Random Forest | ~96%     | ~0.99   |
+| Health     | Random Forest | ~97%     | ~0.99   |
+| Property   | Random Forest | ~97%     | ~0.99   |
+
+---
+
+## 📋 Tech Stack
+
+| Component       | Technology          |
+|-----------------|---------------------|
+| Language        | Python 3.9+         |
+| Data Processing | Pandas, NumPy        |
+| ML Models       | Scikit-learn         |
+| Visualisation   | Matplotlib, Seaborn  |
+| Web Interface   | Streamlit            |
+| Model Saving    | Joblib               |
+
+---
+
+## 🎓 College Demonstration Notes
+
+This project demonstrates:
+1. **End-to-end ML pipeline**: from raw data → trained model → web UI
+2. **Multi-class problem handling**: 3 independent fraud domains
+3. **Model comparison**: objective selection using AUC-ROC
+4. **Real-world feature engineering**: domain-specific fraud indicators
+5. **Production-ready patterns**: model persistence, modular code, clean UI
+
+---
+
+*Built as a college mini-project for demonstration purposes.*
